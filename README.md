@@ -1,6 +1,14 @@
 # app of storing data  for Minecraft players
 
 
+## Start running client
+```
+npm run client
+```
+```
+yarn client
+```
+
 ## Start running server
 ```
 docker-compose up

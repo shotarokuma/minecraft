@@ -10,11 +10,15 @@ const mysqlConfig = {
   database: "minecraft"
 }
 
-const server = app.listen(3000, () => console.log("listening"));
+const server = app.listen(3001, () => console.log("listening"));
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 
 let db = null;
 
-app.get('/', function (req, res) {
+app.get('/', (req, res) => {
   db = mysql.createConnection(mysqlConfig);
   db.connect((err) => {
     if (err) throw err;
@@ -22,8 +26,11 @@ app.get('/', function (req, res) {
     SELECT * FROM user
     `;
     db.query(sql, (err, result) => {
-      if (err) throw err;
-      res.send(JSON.stringify(result));
+      if (err) {
+        throw err
+      };
+      res.set({ 'Access-Control-Allow-Origin': '*' })
+      res.status(201).json(result);
     })
   });
 });
