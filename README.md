@@ -1,4 +1,4 @@
-# app for storaging for Minecraft players
+# app of storing data  for Minecraft players
 
 
 ## Start running server
