@@ -3,19 +3,19 @@
 
 ## Start running server
 ```
-    docker-compose up
+docker-compose up
 ```
 ## Stop server
 ```
-    docker-compose down
+docker-compose down
 ```
 
 
 ## Stop running container using
 ```
-    docker stop node-app
+docker stop node-app
 ```
 ```
-    docker stop mysql_server
+docker stop mysql_server
 ```
 
