@@ -1,13 +1,13 @@
+require('dotenv').config()
 const express = require('express');
 const mysql = require('mysql2');
 const app = express();
 
-
 const mysqlConfig = {
-  host: "mysql_server",
-  user: "cmpt354",
-  password: "root",
-  database: "minecraft"
+  host: process.env.MYSQL_HOST,
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DATABASE,
 }
 
 const server = app.listen(3001, () => console.log("listening"));
