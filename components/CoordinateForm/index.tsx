@@ -2,7 +2,7 @@ import React from 'react';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 
-const CoordinateForm = () => {
+const CoordinateForm:React.FC = () => {
 
   return (
     <Grid container spacing={2}>
