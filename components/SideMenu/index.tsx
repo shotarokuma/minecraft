@@ -18,10 +18,6 @@ const SideMenu: React.FC<Props> = ({
 }) => {
   const router = useRouter();
 
-  const handleUser = () => {
-    router.push('/user');
-  }
-
   const handleBack = () => {
     setOpen(false);
   };
@@ -34,25 +30,98 @@ const SideMenu: React.FC<Props> = ({
     >
       <List>
         <ListItem disablePadding>
-          <ListItemButton onClick={handleUser}>
+          <ListItemButton onClick={() => router.push('/')}>
+            <ListItemText primary="HOME" />
+          </ListItemButton>
+        </ListItem>
+        <Divider />
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => router.push('/user')}>
             <ListItemText primary="user" />
           </ListItemButton>
         </ListItem>
         <Divider />
         <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemText primary="block" />
+          <ListItemButton onClick={() => router.push('/animal')}>
+            <ListItemText primary="animal" />
+          </ListItemButton>
+        </ListItem>
+        <Divider />
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => router.push('/monster')}>
+            <ListItemText primary="monster" />
+          </ListItemButton>
+        </ListItem>
+        <Divider />
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => router.push('/villager')}>
+            <ListItemText primary="villager" />
+          </ListItemButton>
+        </ListItem>
+        <Divider />
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => router.push('/village')}>
+            <ListItemText primary="village" />
+          </ListItemButton>
+        </ListItem>
+        <Divider />
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => router.push('/pillager')}>
+            <ListItemText primary="pillager" />
+          </ListItemButton>
+        </ListItem>
+        <Divider />
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => router.push('/gang')}>
+            <ListItemText primary="gang" />
+          </ListItemButton>
+        </ListItem>
+        <Divider />
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => router.push('/item')}>
+            <ListItemText primary="item" />
           </ListItemButton>
         </ListItem>
         <Divider />
         <ListItem disablePadding>
           <ListItemButton>
-            <ListItemText primary="monster" />
+            <ListItemText primary="enchantment" onClick={() => router.push('/enchantment')}/>
           </ListItemButton>
         </ListItem>
+        <Divider />
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemText primary="block" onClick={() => router.push('/block')}/>
+          </ListItemButton>
+        </ListItem>
+        <Divider />
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemText primary="chunk" onClick={() => router.push('/chunk')}/>
+          </ListItemButton>
+        </ListItem>
+        <Divider />
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemText primary="chest" onClick={() => router.push('/chest')}/>
+          </ListItemButton>
+        </ListItem>
+        <Divider />
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemText primary="ender_chest" onClick={() => router.push('/ender_chest')}/>
+          </ListItemButton>
+        </ListItem>
+        <Divider />
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemText primary="user_storage" onClick={() => router.push('/user_storage')}/>
+          </ListItemButton>
+        </ListItem>
+        <Divider />
         <ListItem disablePadding>
           <ListItemButton onClick={handleBack}>
-            <ListItemText primary="back" />
+            <ListItemText primary="close" />
           </ListItemButton>
         </ListItem>
         <Divider />

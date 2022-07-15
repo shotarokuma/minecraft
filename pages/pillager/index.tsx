@@ -46,7 +46,7 @@ const Page: NextPage = () => {
     <ThemeProvider theme={theme}>
       <Header />
       <Container maxWidth="sm">
-        <Typography variant="h5" style={{ marginTop: "30px",textAlign:"center" }} >{"User's data"}</Typography>
+        <Typography variant="h5" style={{ marginTop: "30px",textAlign:"center" }} >{"Pillager's data"}</Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormTextField register={register} type="id" isNum={true} />
           <FormTextField register={register} type="name" isNum={false} />

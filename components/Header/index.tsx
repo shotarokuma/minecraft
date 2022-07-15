@@ -56,7 +56,7 @@ const Header = () => {
       <Drawer
         anchor='left'
         open={open}
-        onClose={toggleDrawer}
+        onClose={toggleDrawer(false)}
       >
         <SideMenu
           toggleDrawer={toggleDrawer}
