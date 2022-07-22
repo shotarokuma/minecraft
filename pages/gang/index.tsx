@@ -1,6 +1,7 @@
 import React from 'react';
 import { NextPage } from 'next';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import axios from "axios";
 
 import Button from '@mui/material/Button';
 import Container from "@mui/material/Container";
@@ -9,6 +10,7 @@ import TableContainer from "@mui/material/TableContainer";
 import Table from '@mui/material/Table';
 import TableBody from "@mui/material/TableBody";
 import TableCell from '@mui/material/TableCell';
+import TableHead  from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import Header from '../../components/Header';
@@ -17,30 +19,27 @@ import CoordinateForm from '../../components/CoordinateForm';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../style/constants';
 
-type User = {
-  id: number;
-  name: string;
-  coordinate: number[];
-  foodbar: number;
-  health: string;
+type Gangs = {
+  Location: string;
 };
 
 const Page: NextPage = () => {
-  //mock data 
-  const [users, setUsers] = React.useState<User[]>([
-    { id: 1, name: "Mark", coordinate: [3, 3, 3], foodbar: 2, health: "hunger" },
-    { id: 2, name: "Mark", coordinate: [3, 3, 3], foodbar: 2, health: "hunger" },
-    { id: 3, name: "Mark", coordinate: [3, 3, 3], foodbar: 2, health: "hunger" },
-    { id: 4, name: "Mark", coordinate: [3, 3, 3], foodbar: 2, health: "hunger" },
-    { id: 5, name: "Mark", coordinate: [3, 3, 3], foodbar: 2, health: "hunger" },
-  ]);
+  const [gangs, setGangs] = React.useState<Gangs[]>([]);
 
-  const { register, handleSubmit, reset } = useForm<User>();
+  const { register, handleSubmit, reset } = useForm<Gangs>();
 
-  const onSubmit: SubmitHandler<User> = (data) => {
+  const onSubmit: SubmitHandler<Gangs> = (data) => {
     console.log(data);
     reset();
   };
+
+  React.useEffect(() => {
+    axios.get('http://localhost:3001/gangs')
+    .then((res) => {
+      setGangs(res.data)
+    })
+    .catch(err => alert(err))
+  },[])
 
   return (
     <ThemeProvider theme={theme}>
@@ -66,18 +65,17 @@ const Page: NextPage = () => {
         <Paper sx={{ width: '100%', overflow: 'hidden' }} elevation={3} style={{ marginTop: "100px" }}>
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table aria-label="simple table">
+              <TableHead>
+                <TableCell align='center'>Location</TableCell>
+              </TableHead>
               <TableBody>
-                {users.map((user, key) => {
+                {gangs.map((gang, key) => {
                   return (
                     <TableRow
                       key={key}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
-                      <TableCell >{user.id}</TableCell>
-                      <TableCell>{user.name}</TableCell>
-                      <TableCell >{user.coordinate.toString()}</TableCell>
-                      <TableCell >{user.foodbar}</TableCell>
-                      <TableCell >{user.health}</TableCell>
+                      <TableCell align="center">{gang.Location}</TableCell>
                     </TableRow>
                   )
                 })}

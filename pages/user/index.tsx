@@ -1,6 +1,7 @@
-import React from 'react';
-import { NextPage } from 'next';
+import React from "react";
+import { NextPage } from "next";
 import { useForm, SubmitHandler, UseFormRegister } from 'react-hook-form';
+import axios from "axios";
 
 import AdjustIcon from '@mui/icons-material/Adjust';
 import Button from '@mui/material/Button';
@@ -15,6 +16,7 @@ import TableContainer from "@mui/material/TableContainer";
 import Table from '@mui/material/Table';
 import TableBody from "@mui/material/TableBody";
 import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import Header from '../../components/Header';
@@ -24,11 +26,16 @@ import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../style/constants';
 
 type User = {
-  id: number;
-  name: string;
-  coordinate: number[];
-  foodbar: number;
-  health: string;
+  Id: number;
+  Name: string;
+  CoordinateX: number;
+  CoordinateY: number;
+  CoordinateZ: number;
+  Food_Bar: number;
+  Health: string;
+  Spawn_PointX: number;
+  Spawn_PointY: number;
+  Spawn_PointZ: number;
 };
 
 type Form = {
@@ -48,19 +55,10 @@ const Form: React.FC<Form> = ({ register }) => {
 };
 
 const Page: NextPage = () => {
-  //mock data 
-  const [users, setUsers] = React.useState<User[]>([
-    { id: 1, name: "Mark", coordinate: [3, 3, 3], foodbar: 2, health: "hunger" },
-    { id: 2, name: "Mark", coordinate: [3, 3, 3], foodbar: 2, health: "hunger" },
-    { id: 3, name: "Mark", coordinate: [3, 3, 3], foodbar: 2, health: "hunger" },
-    { id: 4, name: "Mark", coordinate: [3, 3, 3], foodbar: 2, health: "hunger" },
-    { id: 5, name: "Mark", coordinate: [3, 3, 3], foodbar: 2, health: "hunger" },
-  ]);
-
+  const [users, setUsers] = React.useState<User[]>([]);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
 
   const { register, handleSubmit, reset } = useForm<User>();
 
@@ -68,6 +66,14 @@ const Page: NextPage = () => {
     console.log(data);
     reset();
   };
+
+  React.useEffect(() => {
+    axios.get("http://localhost:3001/user")
+      .then((res) => {
+        setUsers(res.data);
+      })
+      .catch((err) => alert(err));
+  }, [])
 
   return (
     <ThemeProvider theme={theme}>
@@ -89,6 +95,16 @@ const Page: NextPage = () => {
         <Paper sx={{ width: '100%', overflow: 'hidden' }} elevation={3} style={{ marginTop: "100px" }}>
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="left" width="20px"/>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Coordinate</TableCell>
+                  <TableCell>Food Bar</TableCell>
+                  <TableCell>Health</TableCell>
+                  <TableCell>Spawn Point</TableCell>
+                </TableRow>
+              </TableHead>
               <TableBody>
                 {users.map((user, key) => {
                   return (
@@ -102,11 +118,11 @@ const Page: NextPage = () => {
                           <AdjustIcon />
                         </IconButton>
                       </TableCell>
-                      <TableCell>{user.id}</TableCell>
-                      <TableCell>{user.name}</TableCell>
-                      <TableCell >{user.coordinate.toString()}</TableCell>
-                      <TableCell >{user.foodbar}</TableCell>
-                      <TableCell >{user.health}</TableCell>
+                      <TableCell>{user.Name}</TableCell>
+                      <TableCell >{[user.CoordinateX, user.CoordinateY, user.CoordinateZ].toString()}</TableCell>
+                      <TableCell >{user.Food_Bar}</TableCell>
+                      <TableCell >{user.Health}</TableCell>
+                      <TableCell >{[user.Spawn_PointX, user.Spawn_PointY, user.Spawn_PointZ].toString()}</TableCell>
                     </TableRow>
                   )
                 })}
@@ -124,7 +140,7 @@ const Page: NextPage = () => {
         </DialogTitle>
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogContent>
-            <Form register={register}/>
+            <Form register={register} />
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}

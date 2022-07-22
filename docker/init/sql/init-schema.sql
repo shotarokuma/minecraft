@@ -35,9 +35,7 @@ CREATE TABLE Blocks(
    CoordinateChunkX INT NOT NULL,
    CoordinateChunkY INT NOT NULL,
    CoordinateChunkZ INT NOT NULL,
-
    Type VARCHAR(20),
-
    PRIMARY KEY(CoordinateBlockX, CoordinateBlockY,CoordinateBlockZ ,CoordinateChunkX,CoordinateChunkY,CoordinateChunkZ, Type),
    FOREIGN KEY(CoordinateChunkX,CoordinateChunkY,CoordinateChunkZ ) REFERENCES Chunks(CoordinateX,CoordinateY,CoordinateZ),
    FOREIGN KEY(Type) REFERENCES Block_Types(Type)
@@ -149,7 +147,7 @@ CREATE TABLE User_storage(
 CREATE TABLE Monster(
    ID INT,
    Health VARCHAR(20) NOT NULL,
-   Dmage INT,
+   Damage INT,
    PRIMARY KEY(ID)
 );
 
