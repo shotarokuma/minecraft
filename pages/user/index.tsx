@@ -40,7 +40,7 @@ type User = {
 
 type Form = {
   register: UseFormRegister<User>
-}
+};
 
 const Form: React.FC<Form> = ({ register }) => {
   return (
@@ -67,7 +67,7 @@ const Page: NextPage = () => {
   const handleClose = () => {
     setOpen(false);
     setID(null);
-  }
+  };
 
   const { register, handleSubmit, reset } = useForm<User>();
 
@@ -99,7 +99,6 @@ const Page: NextPage = () => {
   };
 
   const onDelete = async () => {
-    console.log({target:id});
     await axios.delete("/api/user",{ data: { target: id } })
     .then(() => {
       updateDisplay();

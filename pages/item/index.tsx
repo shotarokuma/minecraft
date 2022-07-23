@@ -1,11 +1,17 @@
 import React from 'react';
 import { NextPage } from 'next';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler, UseFormRegister } from 'react-hook-form';
 import axios from "axios";
 
+import AdjustIcon from '@mui/icons-material/Adjust';
 import Button from '@mui/material/Button';
 import Container from "@mui/material/Container";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import Paper from '@mui/material/Paper';
+import IconButton from '@mui/material/IconButton';
 import TableContainer from "@mui/material/TableContainer";
 import Table from '@mui/material/Table';
 import TableBody from "@mui/material/TableBody";
@@ -20,40 +26,91 @@ import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../style/constants';
 
 type Items = {
-  id: number;
+  ID: number;
   Type: string;
+};
+
+type Form = {
+  register: UseFormRegister<Items>
+};
+
+const Form: React.FC<Form> = ({ register }) => {
+  return (
+    <>
+      <FormTextField register={register} type="Type" isNum={false} />
+    </>
+  );
 };
 
 const Page: NextPage = () => {
   const [items, setItems] = React.useState<Items[]>([]);
   const { register, handleSubmit, reset } = useForm<Items>();
-  const onSubmit: SubmitHandler<Items> = (data) => {
-    console.log(data);
+  const [open, setOpen] = React.useState(false);
+  const [id, setID] = React.useState<number | null>(null);
+  const handleOpen = (ID: number) => {
+    setOpen(true);
+    setID(ID);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setID(null);
+  };
+
+  const updateDisplay = React.useCallback(async () => {
+    await axios.get('/api/items')
+      .then((res) => {
+        setItems(res.data);
+      })
+      .catch((err) => alert(err));
+  }, []);
+
+
+  const onSubmit: SubmitHandler<Items> = async (data) => {
+    await axios.post("/api/item", data)
+      .then(() => {
+        updateDisplay();
+      })
+      .catch((err) => alert(err))
     reset();
   };
 
+
+  const onSubmitUpdate: SubmitHandler<Items> = async (data) => {
+    await axios.put("/api/item", { ...data, target: id })
+      .then(() => {
+        updateDisplay();
+      })
+      .catch((err) => alert(err))
+    reset();
+    setOpen(false);
+  };
+
+
+  const onDelete = async () => {
+    await axios.delete("/api/item", { data: { target: id } })
+      .then(() => {
+        updateDisplay();
+        handleClose();
+      })
+      .catch((err) => alert(err))
+  };
+
   React.useEffect(() => {
-    axios.get('/api/items')
-    .then((res) => {
-      setItems(res.data)
-    })
-    .catch(err => alert(err));
-  },[])
+    updateDisplay();
+  }, [updateDisplay])
+
   return (
     <ThemeProvider theme={theme}>
       <Header />
       <Container maxWidth="sm">
-        <Typography variant="h5" style={{ marginTop: "30px",textAlign:"center" }} >{"Item's data"}</Typography>
+        <Typography variant="h5" style={{ marginTop: "30px", textAlign: "center" }} >{"Item's data"}</Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <FormTextField register={register} type="id" isNum={true} />
-          <FormTextField register={register} type="name" isNum={false} />
-          <CoordinateForm />
-          <FormTextField register={register} type="foodbar" isNum={true} />
-          <FormTextField register={register} type="health" isNum={false} />
+          <Form register={register} />
           <Button
             variant="contained"
-            type="submit"
             color="primary"
+            type="submit"
             fullWidth
           >Submit
           </Button>
@@ -64,6 +121,7 @@ const Page: NextPage = () => {
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table aria-label="simple table">
               <TableHead>
+              <TableCell align="left" width="20px" />
                 <TableCell align="center">Type</TableCell>
               </TableHead>
               <TableBody>
@@ -73,6 +131,11 @@ const Page: NextPage = () => {
                       key={key}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
+                        <TableCell align="left" width="20px">
+                        <IconButton color="primary" onClick={() => handleOpen(item.ID)}>
+                          <AdjustIcon />
+                        </IconButton>
+                      </TableCell>
                       <TableCell align="center">{item.Type}</TableCell>
                     </TableRow>
                   )
@@ -82,6 +145,32 @@ const Page: NextPage = () => {
           </TableContainer>
         </Paper>
       </Container>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+      >
+        <DialogTitle>
+          {"Edit your data"}
+        </DialogTitle>
+        <form>
+          <DialogContent>
+            <Form register={register} />
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={onDelete}
+              variant="contained"
+              color="primary"
+            >Delete</Button>
+            <Button
+              onClick={handleSubmit(onSubmitUpdate)}
+              variant="contained"
+              color="primary"
+            >Update
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
     </ThemeProvider >
   )
 }

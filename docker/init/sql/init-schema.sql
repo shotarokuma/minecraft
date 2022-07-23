@@ -37,7 +37,9 @@ CREATE TABLE Blocks(
    CoordinateChunkZ INT NOT NULL,
    Type VARCHAR(20),
    PRIMARY KEY(CoordinateBlockX, CoordinateBlockY,CoordinateBlockZ ,CoordinateChunkX,CoordinateChunkY,CoordinateChunkZ, Type),
-   FOREIGN KEY(CoordinateChunkX,CoordinateChunkY,CoordinateChunkZ ) REFERENCES Chunks(CoordinateX,CoordinateY,CoordinateZ),
+   FOREIGN KEY(CoordinateChunkX,CoordinateChunkY,CoordinateChunkZ ) REFERENCES Chunks(CoordinateX,CoordinateY,CoordinateZ)
+   ON UPDATE CASCADE
+   ON DELETE CASCADE,
    FOREIGN KEY(Type) REFERENCES Block_Types(Type) 
    ON UPDATE CASCADE
    ON DELETE CASCADE
@@ -125,8 +127,12 @@ CREATE TABLE Items_stored_at(
   Storage_ID INT,
   Items_ID INT,
   PRIMARY KEY(Storage_ID, Items_ID),
-  FOREIGN KEY (Storage_ID) REFERENCES Storage(ID),
+  FOREIGN KEY (Storage_ID) REFERENCES Storage(ID)
+   ON UPDATE CASCADE
+  ON DELETE CASCADE,
   FOREIGN KEY (Items_ID) REFERENCES Items (ID)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE
 );
 
 CREATE TABLE Blocks_stored_at(

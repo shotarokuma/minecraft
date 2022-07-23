@@ -98,6 +98,61 @@ app.get('/chunks', (req, res) => {
   });
 });
 
+app.post('/chunk', (req, res) => {
+  db = mysql.createConnection(mysqlConfig);
+  db.connect((err) => {
+    if (err) res.status(500).json(err);
+    const sql = `
+    INSERT INTO Chunks VALUES(${req.body.CoordinateX},${req.body.CoordinateY},${req.body.CoordinateZ}, '${req.body.Weather}');
+    `;
+    db.query(sql, (err, result) => {
+      if (err) {
+        res.status(500).json(err);
+      };
+      res.status(201).json(result);
+    })
+  });
+});
+
+app.delete('/chunk', (req, res) => {
+  db = mysql.createConnection(mysqlConfig);
+  db.connect((err) => {
+    if (err) res.status(500).json(err);
+    const sql = `
+      DELETE FROM Chunks 
+      WHERE CoordinateX = ${req.body.target[0]} 
+      AND CoordinateY = ${req.body.target[1]}
+      AND CoordinateZ = ${req.body.target[2]};
+    `;
+    db.query(sql, (err, result) => {
+      if (err) {
+        res.status(500).json(err);
+      };
+      res.status(201).json(result);
+    })
+  })
+});
+
+
+app.put('/chunk', (req, res) => {
+  db = mysql.createConnection(mysqlConfig);
+  db.connect((err) => {
+    if (err) res.status(500).json(err);
+    const sql = `
+      UPDATE Chunks SET CoordinateX = ${req.body.CoordinateX}, CoordinateY = ${req.body.CoordinateY}, CoordinateZ = ${req.body.CoordinateZ}, Weather = '${req.body.Weather}'
+      WHERE CoordinateX = ${req.body.target[0]} 
+      AND CoordinateY = ${req.body.target[1]}
+      AND CoordinateZ = ${req.body.target[2]};
+    `;
+    db.query(sql, (err, result) => {
+      if (err) {
+        res.status(500).json(err);
+      };
+      res.status(201).json(result);
+    })
+  })
+})
+
 app.get('/blocks', (req, res) => {
   db = mysql.createConnection(mysqlConfig);
   db.connect((err) => {
@@ -130,6 +185,58 @@ app.get('/items', (req, res) => {
   });
 });
 
+app.post('/item', (req, res) => {
+  db = mysql.createConnection(mysqlConfig);
+  db.connect((err) => {
+    if (err) res.status(500).json(err);
+    const sql = `
+    INSERT INTO Items(Type) VALUES('${req.body.Type}');
+    `;
+    db.query(sql, (err, result) => {
+      if (err) {
+        res.status(500).json(err);
+      };
+      res.status(201).json(result);
+    })
+  });
+});
+
+app.delete('/item', (req, res) => {
+  db = mysql.createConnection(mysqlConfig);
+  db.connect((err) => {
+    if (err) res.status(500).json(err);
+    const sql = `
+    DELETE FROM Items
+    WHERE ID = ${req.body.target};
+    `;
+    db.query(sql, (err, result) => {
+      if (err) {
+        res.status(500).json(err);
+      };
+      res.status(201).json(result);
+    })
+  });
+});
+
+
+app.put('/item', (req, res) => {
+  db = mysql.createConnection(mysqlConfig);
+  db.connect((err) => {
+    if (err) res.status(500).json(err);
+    const sql = `
+    UPDATE Items SET Type = ${req.body.Type}
+    WHERE ID = ${req.body.target} 
+    `;
+    db.query(sql, (err, result) => {
+      if (err) {
+        res.status(500).json(err);
+      };
+      res.status(201).json(result);
+    })
+  });
+});
+
+
 app.get('/enchantments', (req, res) => {
   db = mysql.createConnection(mysqlConfig);
   db.connect((err) => {
@@ -145,6 +252,61 @@ app.get('/enchantments', (req, res) => {
     })
   });
 });
+
+
+app.post('/enchantment', (req, res) => {
+  db = mysql.createConnection(mysqlConfig);
+  db.connect((err) => {
+    if (err) res.status(500).json(err);
+    const sql = `
+    INSERT INTO Enchantments VALUES('${req.body.Type}', ${req.body.Level});
+    `;
+    db.query(sql, (err, result) => {
+      if (err) {
+        res.status(500).json(err);
+      };
+      res.status(201).json(result);
+    })
+  });
+});
+
+
+app.delete('/enchantment', (req, res) => {
+  db = mysql.createConnection(mysqlConfig);
+  db.connect((err) => {
+    if (err) res.status(500).json(err);
+    const sql = `
+    DELETE FROM Enchantments
+    WHERE Type = '${req.body.target}';
+    `;
+    db.query(sql, (err, result) => {
+      if (err) {
+        res.status(500).json(err);
+      };
+      res.status(201).json(result);
+    })
+  });
+});
+
+
+
+app.put('/enchantment', (req, res) => {
+  db = mysql.createConnection(mysqlConfig);
+  db.connect((err) => {
+    if (err) res.status(500).json(err);
+    const sql = `
+    UPDATE Enchantments SET Type = ${req.body.Type}, Level = ${req.body.Level}
+    WHERE Type = '${req.body.target}'
+    `;
+    db.query(sql, (err, result) => {
+      if (err) {
+        res.status(500).json(err);
+      };
+      res.status(201).json(result);
+    })
+  });
+});
+
 
 app.get('/villages', (req, res) => {
   db = mysql.createConnection(mysqlConfig);
@@ -162,6 +324,64 @@ app.get('/villages', (req, res) => {
   });
 });
 
+
+app.post('/village', (req, res) => {
+  db = mysql.createConnection(mysqlConfig);
+  db.connect((err) => {
+    if (err) res.status(500).json(err);
+    const sql = `
+    INSERT INTO Villages VALUES(${req.body.CoordinateX},${req.body.CoordinateY},${req.body.CoordinateZ});
+    `;
+    db.query(sql, (err, result) => {
+      if (err) {
+        res.status(500).json(err);
+      };
+      res.status(201).json(result);
+    })
+  });
+});
+
+app.delete('/village',(req, res) => {
+  db = mysql.createConnection(mysqlConfig);
+  db.connect((err) => {
+    if (err) res.status(500).json(err);
+    const sql = `
+    DELETE FROM Villages 
+    WHERE CoordinateX = ${req.body.target[0]} 
+    AND CoordinateY = ${req.body.target[1]}
+    AND CoordinateZ = ${req.body.target[2]};
+    `;
+    db.query(sql, (err, result) => {
+      if (err) {
+        res.status(500).json(err);
+      };
+      res.status(201).json(result);
+    })
+  });
+});
+
+
+app.put('/village',(req, res) => {
+  db = mysql.createConnection(mysqlConfig);
+  db.connect((err) => {
+    if (err) res.status(500).json(err);
+    const sql = `
+    UPDATE Villages SET CoordinateX = ${req.body.CoordinateX}, CoordinateY = ${req.body.CoordinateY}, CoordinateZ=${req.body.CoordinateZ}
+    WHERE CoordinateX = ${req.body.target[0]} 
+    AND CoordinateY = ${req.body.target[1]}
+    AND CoordinateZ = ${req.body.target[2]};
+    `;
+    db.query(sql, (err, result) => {
+      if (err) {
+        res.status(500).json(err);
+      };
+      res.status(201).json(result);
+    })
+  });
+});
+
+
+
 app.get('/villagers', (req, res) => {
   db = mysql.createConnection(mysqlConfig);
   db.connect((err) => {
@@ -178,15 +398,52 @@ app.get('/villagers', (req, res) => {
   });
 });
 
-app.get('/storage', (req, res) => {
+
+app.post('/villager', (req, res) => {
   db = mysql.createConnection(mysqlConfig);
   db.connect((err) => {
     if (err) res.status(500).json(err);
     const sql = `
-    SELECT * FROM Storage
+    INSERT INTO Villagers VALUES(${req.body.ID},${req.body.CoordinateX},${req.body.CoordinateY},${req.body.CoordinateZ}, '${req.body.Occupation}', '${req.body.Health}');
     `;
     db.query(sql, (err, result) => {
       if (err) {
+        res.status(500).json(err);
+      };
+      res.status(201).json(result);
+    })
+  });
+});
+
+app.delete('/villager', (req, res) => {
+  db = mysql.createConnection(mysqlConfig);
+  db.connect((err) => {
+    if (err) res.status(500).json(err);
+    const sql = `
+    DELETE FROM Villagers 
+    WHERE ID = ${req.body.target};
+    `;
+    db.query(sql, (err, result) => {
+      if (err) {
+        console.log(err)
+        res.status(500).json(err);
+      };
+      res.status(201).json(result);
+    })
+  });
+});
+
+app.put('/villager', (req, res) => {
+  db = mysql.createConnection(mysqlConfig);
+  db.connect((err) => {
+    if (err) res.status(500).json(err);
+    const sql = `
+    UPDATE Villagers  SET ID = ${req.body.ID},CoordinateX = ${req.body.CoordinateX}, CoordinateY = ${req.body.CoordinateY},CoordinateZ = ${req.body.CoordinateZ}, Occupation = '${req.body.Occupation}', Health ='${req.body.Health}'
+    WHERE ID = ${req.body.target};
+    `;
+    db.query(sql, (err, result) => {
+      if (err) {
+        console.log(err)
         res.status(500).json(err);
       };
       res.status(201).json(result);
@@ -258,6 +515,59 @@ app.get('/monsters', (req, res) => {
   });
 });
 
+app.post('/monster', (req, res) => {
+  db = mysql.createConnection(mysqlConfig);
+  db.connect((err) => {
+    if (err) res.status(500).json(err);
+    const sql = `
+    INSERT INTO Monster VALUES(${req.body.ID}, '${req.body.Health}', ${req.body.Damage});
+    `;
+    db.query(sql, (err, result) => {
+      if (err) {
+        res.status(500).json(err);
+      };
+      res.status(201).json(result);
+    })
+  });
+});
+
+
+app.delete('/monster', (req, res) => {
+  db = mysql.createConnection(mysqlConfig);
+  db.connect((err) => {
+    if (err) res.status(500).json(err);
+    const sql = `
+    DELETE FROM Monster 
+    WHERE ID = ${req.body.target};
+    `;
+    db.query(sql, (err, result) => {
+      if (err) {
+        console.log(err)
+        res.status(500).json(err);
+      };
+      res.status(201).json(result);
+    })
+  });
+});
+
+app.put('/monster',(req, res) => {
+  db = mysql.createConnection(mysqlConfig);
+  db.connect((err) => {
+    if (err) res.status(500).json(err);
+    const sql = `
+    UPDATE Monster SET ID = ${req.body.ID}, Health = '${req.body.Health}',Damage = ${req.body.Damage}
+    WHERE ID = ${req.body.target};
+    `;
+    db.query(sql, (err, result) => {
+      if (err) {
+        console.log(err)
+        res.status(500).json(err);
+      };
+      res.status(201).json(result);
+    })
+  });
+},[])
+
 app.get('/gangs', (req, res) => {
   db = mysql.createConnection(mysqlConfig);
   db.connect((err) => {
@@ -289,6 +599,61 @@ app.get('/pillagers', (req, res) => {
     })
   });
 });
+
+app.post('/pillager', (req, res) => {
+  db = mysql.createConnection(mysqlConfig);
+  db.connect((err) => {
+    if (err) res.status(500).json(err);
+    const sql = `
+    INSERT INTO Pillagers VALUES(${req.body.ID}, '${req.body.Location}', '${req.body.Occupation}');
+    `;
+    db.query(sql, (err, result) => {
+      if (err) {
+        res.status(500).json(err);
+      };
+      res.status(201).json(result);
+    })
+  });
+});
+
+
+app.delete('/pillager', (req, res) => {
+  db = mysql.createConnection(mysqlConfig);
+  db.connect((err) => {
+    if (err) res.status(500).json(err);
+    const sql = `
+    DELETE FROM Pillagers
+    WHERE ID = ${req.body.target};
+    `;
+    db.query(sql, (err, result) => {
+      if (err) {
+        res.status(500).json(err);
+      };
+      res.status(201).json(result);
+    })
+  });
+});
+
+
+app.put('/pillager', (req, res) => {
+  db = mysql.createConnection(mysqlConfig);
+  db.connect((err) => {
+    if (err) res.status(500).json(err);
+    const sql = `
+    UPDATE Pillagers SET ID = ${req.body.ID}, Location= '${req.body.Location}', Occupation= '${req.body.Occupation}'
+    WHERE ID = ${req.body.target};
+    `;
+    db.query(sql, (err, result) => {
+      if (err) {
+        console.log(err)
+        res.status(500).json(err);
+      };
+      res.status(201).json(result);
+    })
+  });
+});
+
+
 
 app.get('/animal', (req, res) => {
   db = mysql.createConnection(mysqlConfig);
