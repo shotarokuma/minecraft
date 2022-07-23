@@ -36,7 +36,7 @@ const Page: NextPage = () => {
   };
 
   React.useEffect(() => {
-    axios.get("http://localhost:3001/villages")
+    axios.get("/api/villages")
     .then((res) => {
       setVillages(res.data);
     })

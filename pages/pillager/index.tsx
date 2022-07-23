@@ -35,7 +35,7 @@ const Page: NextPage = () => {
   };
 
   React.useEffect(() => {
-    axios.get('http://localhost:3001/pillagers')
+    axios.get('/api/pillagers')
     .then((res) => {
       setPillagers(res.data);
     })

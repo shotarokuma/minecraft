@@ -38,7 +38,9 @@ CREATE TABLE Blocks(
    Type VARCHAR(20),
    PRIMARY KEY(CoordinateBlockX, CoordinateBlockY,CoordinateBlockZ ,CoordinateChunkX,CoordinateChunkY,CoordinateChunkZ, Type),
    FOREIGN KEY(CoordinateChunkX,CoordinateChunkY,CoordinateChunkZ ) REFERENCES Chunks(CoordinateX,CoordinateY,CoordinateZ),
-   FOREIGN KEY(Type) REFERENCES Block_Types(Type)
+   FOREIGN KEY(Type) REFERENCES Block_Types(Type) 
+   ON UPDATE CASCADE
+   ON DELETE CASCADE
 );
 
 CREATE TABLE Items(
@@ -51,7 +53,9 @@ CREATE TABLE Tools(
    ID INT,
    Durability INT NOT NULL,
    PRIMARY KEY(ID),
-   FOREIGN KEY(ID) REFERENCES Items(ID)
+   FOREIGN KEY(ID) REFERENCES Items(ID) 
+   ON UPDATE CASCADE
+   ON DELETE CASCADE
 );
 
 CREATE TABLE Enchantments(
@@ -65,8 +69,12 @@ CREATE TABLE AppliedTo(
    ID INT,
    Level INT,
    PRIMARY KEY(Type, Level, ID),
-   FOREIGN KEY(Type, Level) REFERENCES Enchantments(Type,Level),
-   FOREIGN KEY(ID) REFERENCES Items(ID)
+   FOREIGN KEY(Type, Level) REFERENCES Enchantments(Type,Level) 
+   ON UPDATE CASCADE
+   ON DELETE CASCADE,
+   FOREIGN KEY(ID) REFERENCES Items(ID) 
+   ON UPDATE CASCADE
+   ON DELETE CASCADE
 );
 
 
@@ -74,7 +82,7 @@ CREATE TABLE Villages(
    CoordinateX INT NOT NULL,
    CoordinateY INT NOT NULL,
    CoordinateZ INT NOT NULL,
-   PRIMARY KEY(CoordinateX, CoordinateY, CoordinateZ)
+   PRIMARY KEY(CoordinateX, CoordinateY, CoordinateZ) 
 );
 
 CREATE TABLE Villagers(
@@ -85,7 +93,9 @@ CREATE TABLE Villagers(
     Health VARCHAR(20) NOT NULL,
     Occupation VARCHAR(20) NOT NULL,
     PRIMARY KEY(ID),
-    FOREIGN KEY (CoordinateX,CoordinateY,CoordinateZ) REFERENCES Villages(CoordinateX,CoordinateY,CoordinateZ)
+    FOREIGN KEY (CoordinateX,CoordinateY,CoordinateZ) REFERENCES Villages(CoordinateX,CoordinateY,CoordinateZ) 
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
 );
 
 
@@ -96,8 +106,12 @@ CREATE TABLE Host_In(
   CoordinateZ INT NOT NULL,
   User_ID INT NOT NULL,
   PRIMARY KEY(CoordinateX, CoordinateY,CoordinateZ,User_ID),
-  FOREIGN KEY(CoordinateX, CoordinateY,CoordinateZ) REFERENCES Villages(CoordinateX, CoordinateY,CoordinateZ),
-  FOREIGN KEY(User_ID) REFERENCES User(ID)
+  FOREIGN KEY(CoordinateX, CoordinateY,CoordinateZ) REFERENCES Villages(CoordinateX, CoordinateY,CoordinateZ)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE,
+  FOREIGN KEY(User_ID) REFERENCES User(ID) 
+  ON UPDATE CASCADE
+  ON DELETE CASCADE
 );
 
 CREATE TABLE Storage(
@@ -141,7 +155,9 @@ CREATE TABLE User_storage(
   Storage_ID INT NOT NULL,
   User_ID INT,
   PRIMARY KEY(Storage_ID),
-  FOREIGN KEY(User_ID) REFERENCES User(ID)
+  FOREIGN KEY(User_ID) REFERENCES User(ID) 
+  ON UPDATE CASCADE
+  ON DELETE CASCADE
 );
 
 CREATE TABLE Monster(
@@ -161,7 +177,9 @@ CREATE TABLE Pillagers(
    Location VARCHAR(10),
    Occupation VARCHAR(20),
    PRIMARY KEY(ID),
-   FOREIGN KEY (Location) REFERENCES Gangs(Location)
+   FOREIGN KEY (Location) REFERENCES Gangs(Location) 
+   ON UPDATE CASCADE
+   ON DELETE CASCADE
 );
 
 CREATE TABLE Animal(

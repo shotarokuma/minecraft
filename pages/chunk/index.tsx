@@ -37,7 +37,7 @@ const Page: NextPage = () => {
   };
 
   React.useEffect(() => {
-    axios.get("http://localhost:3001/chunks")
+    axios.get("/api/chunks")
     .then((res) => {
       setChunks(res.data);
     })

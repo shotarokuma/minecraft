@@ -36,7 +36,7 @@ const Page: NextPage = () => {
   };
 
   React.useEffect(() => {
-    axios.get('http://localhost:3001/user_storage')
+    axios.get('/api/user_storage')
     .then((res) => {
       setUsersStorages(res.data)
     })

@@ -34,7 +34,7 @@ const Page: NextPage = () => {
   };
 
   React.useEffect(() => {
-    axios.get('http://localhost:3001/gangs')
+    axios.get('/api/gangs')
     .then((res) => {
       setGangs(res.data)
     })

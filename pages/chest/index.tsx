@@ -37,7 +37,7 @@ const Page: NextPage = () => {
   };
 
   React.useEffect(() => {
-    axios.get('http://localhost:3001/chests')
+    axios.get('/api/chests')
     .then((res) => {
       setChests(res.data)
     })

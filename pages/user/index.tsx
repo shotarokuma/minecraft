@@ -26,7 +26,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../style/constants';
 
 type User = {
-  Id: number;
+  ID: number;
   Name: string;
   CoordinateX: number;
   CoordinateY: number;
@@ -45,11 +45,12 @@ type Form = {
 const Form: React.FC<Form> = ({ register }) => {
   return (
     <>
-      <FormTextField register={register} type="id" isNum={true} />
-      <FormTextField register={register} type="name" isNum={false} />
-      <CoordinateForm />
-      <FormTextField register={register} type="foodbar" isNum={true} />
-      <FormTextField register={register} type="health" isNum={false} />
+      <FormTextField register={register} type="ID" isNum={true} />
+      <FormTextField register={register} type="Name" isNum={false} />
+      <CoordinateForm register={register} type={"Coordinate"} />
+      <FormTextField register={register} type="Food_Bar" isNum={true} />
+      <FormTextField register={register} type="Health" isNum={false} />
+      <CoordinateForm register={register} type={"Spawn_Point"} />
     </>
   );
 };
@@ -57,23 +58,59 @@ const Form: React.FC<Form> = ({ register }) => {
 const Page: NextPage = () => {
   const [users, setUsers] = React.useState<User[]>([]);
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [id, setID] = React.useState<number|null>(null);
+  const handleOpen = (ID : number) => {
+    setOpen(true);
+    setID(ID);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setID(null);
+  }
 
   const { register, handleSubmit, reset } = useForm<User>();
 
-  const onSubmit: SubmitHandler<User> = (data) => {
-    console.log(data);
-    reset();
-  };
-
-  React.useEffect(() => {
-    axios.get("http://localhost:3001/user")
+  const updateDisplay = React.useCallback(async () => {
+    await axios.get("/api/users")
       .then((res) => {
         setUsers(res.data);
       })
       .catch((err) => alert(err));
-  }, [])
+  }, []);
+
+  const onSubmit: SubmitHandler<User> = async (data) => {
+    await axios.post("/api/user",  data)
+      .then(() => {
+        updateDisplay();
+      })
+    .catch((err) => alert(err))
+    reset();
+  };
+
+  const onSubmitUpdate: SubmitHandler<User> = async (data) => {
+    await axios.put("/api/user",  {...data,target:id})
+      .then(() => {
+        updateDisplay();
+      })
+    .catch((err) => alert(err))
+    reset();
+    setOpen(false);
+  };
+
+  const onDelete = async () => {
+    console.log({target:id});
+    await axios.delete("/api/user",{ data: { target: id } })
+    .then(() => {
+      updateDisplay();
+      handleClose();
+    })
+    .catch((err) => alert(err))
+  };
+
+  React.useEffect(() => {
+    updateDisplay();
+  }, [updateDisplay])
 
   return (
     <ThemeProvider theme={theme}>
@@ -97,7 +134,7 @@ const Page: NextPage = () => {
             <Table aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell align="left" width="20px"/>
+                  <TableCell align="left" width="20px" />
                   <TableCell>Name</TableCell>
                   <TableCell>Coordinate</TableCell>
                   <TableCell>Food Bar</TableCell>
@@ -114,7 +151,7 @@ const Page: NextPage = () => {
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
                       <TableCell align="left" width="20px">
-                        <IconButton color="primary" onClick={handleOpen}>
+                        <IconButton color="primary" onClick={() => handleOpen(user.ID)}>
                           <AdjustIcon />
                         </IconButton>
                       </TableCell>
@@ -138,18 +175,19 @@ const Page: NextPage = () => {
         <DialogTitle>
           {"Edit your data"}
         </DialogTitle>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form>
           <DialogContent>
             <Form register={register} />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}
+            <Button 
+              onClick={onDelete}
               variant="contained"
               color="primary"
             >Delete</Button>
             <Button
+              onClick={handleSubmit(onSubmitUpdate)}
               variant="contained"
-              type="submit"
               color="primary"
             >Update
             </Button>

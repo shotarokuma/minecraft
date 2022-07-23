@@ -1,3 +1,9 @@
+INSERT INTO User VALUES(1,'Mark',2,0,2, 1, 'Hunger',1,2,3);
+INSERT INTO User VALUES(2,'Bob', 9,0,2, 5, 'Death',2,3,4);
+INSERT INTO User VALUES(3,'Catherine', 0,1,3, 5, 'Instant Health',1,4,5);
+INSERT INTO User VALUES(4,'Brian', 3,4,5, 2, 'Absorption',2,4,5);
+INSERT INTO User VALUES(5,'Hao', 1,3,5, 2, 'Death',1,4,5);
+
 INSERT INTO Chunks VALUES(0,0,0, 'rain');
 INSERT INTO Chunks VALUES(0,0,1, 'sunny');
 INSERT INTO Chunks VALUES(0,0,2, 'sunny');
@@ -42,13 +48,6 @@ INSERT INTO AppliedTo VALUES('Mending', 1, 1);
 INSERT INTO AppliedTo VALUES('Unbreaking', 5, 2);
 INSERT INTO AppliedTo VALUES('Unbreaking', 4, 2);
 INSERT INTO AppliedTo VALUES('Mending', 7, 1);
-
-INSERT INTO User VALUES(1,'Mark',2,0,2, 1, 'Hunger',1,2,3);
-INSERT INTO User VALUES(2,'Bob', 9,0,2, 5, 'Death',2,3,4);
-INSERT INTO User VALUES(3,'Catherine', 0,1,3, 5, 'Instant Health',1,4,5);
-INSERT INTO User VALUES(4,'Brian', 3,4,5, 2, 'Absorption',2,4,5);
-INSERT INTO User VALUES(5,'Hao', 1,3,5, 2, 'Death',1,4,5);
-
 
 INSERT INTO Villages VALUES(1,0,2);
 INSERT INTO Villages VALUES(4,0,2);

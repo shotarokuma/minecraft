@@ -39,7 +39,7 @@ const Page: NextPage = () => {
   };
 
   React.useEffect(() => {
-    axios.get("http://localhost:3001/blocks")
+    axios.get("/api/blocks")
     .then((res) => {
       setBlocks(res.data)
     })
@@ -54,7 +54,7 @@ const Page: NextPage = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormTextField register={register} type="id" isNum={true} />
           <FormTextField register={register} type="name" isNum={false} />
-          <CoordinateForm />
+          {/* <CoordinateForm /> */}
           <FormTextField register={register} type="foodbar" isNum={true} />
           <FormTextField register={register} type="health" isNum={false} />
           <Button

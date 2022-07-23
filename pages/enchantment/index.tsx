@@ -35,7 +35,7 @@ const Page: NextPage = () => {
   };
 
   React.useEffect(() => {
-    axios.get("http://localhost:3001/enchantments")
+    axios.get("/api/enchantments")
     .then((res) => {
       setEnchantments(res.data);
     })
