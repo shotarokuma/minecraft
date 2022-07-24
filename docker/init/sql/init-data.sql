@@ -134,8 +134,8 @@ INSERT INTO Pillagers VALUES(3, 'Mountain', 'Fisherman');
 INSERT INTO Pillagers VALUES(4, 'Prison', 'Cartographer');
 INSERT INTO Pillagers VALUES(5, 'Mountain', 'Leatherworker');
 
-INSERT INTO Animal VALUES(1, 'Hunger', 1);
-INSERT INTO Animal VALUES(2, 'Death', 2);
-INSERT INTO Animal VALUES(3, 'Normal', 3);
-INSERT INTO Animal VALUES(4, 'Hunger', 4);
-INSERT INTO Animal VALUES(5, 'Death', 2);
+INSERT INTO Animal VALUES(1,'Dog', 'Hunger', 1, 1);
+INSERT INTO Animal VALUES(2,'Cat', 'Death', 2, 1);
+INSERT INTO Animal VALUES(3, 'Lion', 'Normal', 3, 2);
+INSERT INTO Animal VALUES(4, 'Snake','Hunger', 4, 2);
+INSERT INTO Animal VALUES(5, 'Dog','Death', 2, 1);

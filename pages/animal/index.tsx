@@ -17,8 +17,10 @@ import theme from '../../style/constants';
 
 type Animal= {
   ID: number;
+  Type: string;
   Health: string;
   Damage: number;
+  UserID: number;
 };
 
 const Page: NextPage = () => {
@@ -43,8 +45,10 @@ const Page: NextPage = () => {
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table aria-label="simple table">
               <TableHead>
+                <TableCell>Type</TableCell>
                 <TableCell>Health</TableCell>
                 <TableCell>Damage</TableCell>
+                <TableCell>UserID</TableCell>
               </TableHead>
               <TableBody>
                 {animals.map((animal, key) => {
@@ -53,8 +57,10 @@ const Page: NextPage = () => {
                       key={key}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
+                      <TableCell >{animal.Type}</TableCell>
                       <TableCell >{animal.Health}</TableCell>
                       <TableCell>{animal.Damage}</TableCell>
+                      <TableCell>{animal.UserID}</TableCell>
                     </TableRow>
                   )
                 })}
