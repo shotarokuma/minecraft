@@ -18,7 +18,7 @@ import theme from '../../style/constants';
 
 type Ender_Chest = {
   Storage_ID: number;
-  User_ID: number;
+  UserID: number;
 };
 
 const Page: NextPage = () => {
@@ -54,7 +54,7 @@ const Page: NextPage = () => {
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
                       <TableCell >{echest.Storage_ID}</TableCell>
-                      <TableCell>{echest.User_ID}</TableCell>
+                      <TableCell>{echest.UserID}</TableCell>
                     </TableRow>
                   )
                 })}
