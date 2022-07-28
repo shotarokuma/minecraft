@@ -4,11 +4,10 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "server":"node app.js",
         "dev": "nodemon app.js",
         "client": "node server.js",
         "build": "next build",
-        "start": "next start",
+        "start":"node app.js",
         "lint": "next lint",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
