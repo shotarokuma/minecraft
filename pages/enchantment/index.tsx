@@ -21,18 +21,17 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import Header from '../../components/Header';
 import FormTextField from '../../components/FormTextField';
-import CoordinateForm from '../../components/CoordinateForm';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../style/constants';
 
 type Enchantments = {
-  Type: number;
-  Level: string;
+  Type: string;
+  Level: number;
 };
 
 
 type Form = {
-  register: UseFormRegister<Items>
+  register: UseFormRegister<Enchantments>
 };
 
 const Form: React.FC<Form> = ({ register }) => {
