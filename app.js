@@ -96,8 +96,11 @@ app.get('/user/division', (req, res) => {
     if (err) res.status(500).json(err);
     const sql = `
     SELECT * FROM User
-    INNER JOIN User_Storage AS U ON User.ID = User_storage.User_ID
-    INNER JOIN Ender_Chest U.ID = Ender_Chest.UserID
+    WHERE ID NOT IN (
+      SELECT ID FROM User
+      WHERE ID NOT IN (SELECT UserID  FROM Ender_Chest )
+      OR ID NOT IN ( SELECT User_ID FROM User_storage)
+    )
     `;
     db.query(sql, (err, result) => {
       if (err) {

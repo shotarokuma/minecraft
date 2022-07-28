@@ -70,7 +70,9 @@ const Home: NextPage = () => {
   const [user, setUser] = React.useState<User | null>(null);
   const [host, setHost] = React.useState<Host_In[] | null>(null);
   const [animalNum, setAnimalNum] = React.useState<number | null>(null);
-  const [strongNum, setStrongNum] = React.useState<number|null>(null);
+  const [strongNum, setStrongNum] = React.useState<number | null>(null);
+  const [users, setUsers] = React.useState<User[] | null>(null);
+
 
 
   const handleNext = () => {
@@ -119,6 +121,13 @@ const Home: NextPage = () => {
     reset1();
   };
 
+  React.useEffect(() => {
+    if (activeStep !== 4) return;
+    axios.get('/api/user/division')
+      .then((res) => setUsers(res.data))
+      .catch(err => alert("invalid input"));
+  }, [activeStep])
+
   return (
     <ThemeProvider theme={theme}>
       <Header />
@@ -127,23 +136,27 @@ const Home: NextPage = () => {
         <Typography variant="h5" style={{ marginTop: "30px", textAlign: "center" }} >{"Search your info"}</Typography>
         <form onSubmit={activeStep === 0 ? handleSubmit(onSubmit0) : handleSubmit1(onSubmit1)}>
           <Forms activeStep={activeStep} register={activeStep === 0 ? register : register1} />
+          {activeStep !== 4 && (
+            <Button
+              style={{ marginTop: "30px" }}
+              variant="contained"
+              type="submit"
+              color="primary"
+              fullWidth
+            >Submit
+            </Button>
+          )}
+        </form>
+        {activeStep !== 4 && (
           <Button
             style={{ marginTop: "30px" }}
             variant="contained"
-            type="submit"
+            onClick={handleNext}
             color="primary"
             fullWidth
-          >Submit
+          >Next
           </Button>
-        </form>
-        <Button
-          style={{ marginTop: "30px" }}
-          variant="contained"
-          onClick={handleNext}
-          color="primary"
-          fullWidth
-        >Next
-        </Button>
+        )}
       </Container>
       <Container component="main" maxWidth="md">
         {(activeStep === 0 && user !== null) && (
@@ -201,7 +214,7 @@ const Home: NextPage = () => {
           </Paper>
         )}
         {(activeStep === 2 && animalNum !== null) && (
-          <Card sx={{ display: 'flex',  width: "60%"}} style={{ marginTop: "100px" ,marginRight:"auto" , marginLeft:"auto"}}>
+          <Card sx={{ display: 'flex', width: "80%" }} style={{ marginTop: "100px", marginRight: "auto", marginLeft: "auto" }}>
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
               <CardContent sx={{ flex: '1 0 auto' }}>
                 <Typography variant="subtitle1" color="text.secondary" component="div">
@@ -216,14 +229,14 @@ const Home: NextPage = () => {
               <Image
                 src={animals}
                 alt="animals"
-                width="350px"
+                width="400px"
                 height="300px"
               />
             </CardMedia>
           </Card>
         )}
         {(activeStep === 3 && strongNum !== null) && (
-          <Card sx={{ display: 'flex',  width: "60%"}} style={{ marginTop: "100px" ,marginRight:"auto" , marginLeft:"auto"}}>
+          <Card sx={{ display: 'flex', width: "80%" }} style={{ marginTop: "100px", marginRight: "auto", marginLeft: "auto" }}>
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
               <CardContent sx={{ flex: '1 0 auto' }}>
                 <Typography variant="subtitle1" color="text.secondary" component="div">
@@ -238,11 +251,46 @@ const Home: NextPage = () => {
               <Image
                 src={animals}
                 alt="animals"
-                width="350px"
+                width="400px"
                 height="300px"
               />
             </CardMedia>
           </Card>
+        )}
+         {(activeStep === 4 && users !== null) && (
+          <Paper sx={{ width: '100%' }} elevation={3} style={{ marginTop: "100px" }}>
+            <TableContainer sx={{ maxHeight: 440 }}>
+              <Table aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="left" width="20px">
+                      ID</TableCell>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Coordinate</TableCell>
+                    <TableCell>Food Bar</TableCell>
+                    <TableCell>Health</TableCell>
+                    <TableCell>Spawn Point</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {
+                    users.map((user,index) => (
+                      <TableRow key ={index} hover>
+                      <TableCell align="left" width="20px">
+                        {user.ID}
+                      </TableCell>
+                      <TableCell>{user.Name}</TableCell>
+                      <TableCell >{[user.CoordinateX, user.CoordinateY, user.CoordinateZ].toString()}</TableCell>
+                      <TableCell >{user.Food_Bar}</TableCell>
+                      <TableCell >{user.Health}</TableCell>
+                      <TableCell >{[user.Spawn_PointX, user.Spawn_PointY, user.Spawn_PointZ].toString()}</TableCell>
+                    </TableRow>
+                    ))
+                  }
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
         )}
       </Container>
     </ThemeProvider >
