@@ -18,6 +18,98 @@ app.use(express.urlencoded({ extended: true }));
 
 let db = null;
 
+app.get('/user/select', (req, res) => {
+  db = mysql.createConnection(mysqlConfig);
+  db.connect((err) => {
+    if (err) res.status(500).json(err);
+    const sql = `
+    SELECT * FROM User
+    WHERE Name = '${req.body.Name}'
+    `;
+    db.query(sql, (err, result) => {
+      if (err) {
+        res.status(500).json(err);
+      };
+      res.status(201).json(result);
+    })
+  });
+});
+
+app.get('/user/join', (req, res) => {
+  db = mysql.createConnection(mysqlConfig);
+  db.connect((err) => {
+    if (err) res.status(500).json(err);
+    const sql = `
+    SELECT CoordinateX, CoordinateY, CoordinateZ, Reputation FROM User, Host_In
+    WHERE User.ID = '${req.body.ID}
+    AND User.ID = Host_In.User_ID
+    `;
+    db.query(sql, (err, result) => {
+      if (err) {
+        res.status(500).json(err);
+      };
+      res.status(201).json(result);
+    })
+  });
+});
+
+app.get('/user/aggregation', (req, res) => {
+  db = mysql.createConnection(mysqlConfig);
+  db.connect((err) => {
+    if (err) res.status(500).json(err);
+    const sql = `
+    SELECT COUNT(*) FROM Animal
+    WHERE User_ID = '${req.body.ID}
+    `;
+    db.query(sql, (err, result) => {
+      if (err) {
+        res.status(500).json(err);
+      };
+      res.status(201).json(result);
+    })
+  });
+});
+
+
+app.get('/user/nestedAggregation', (req, res) => {
+  db = mysql.createConnection(mysqlConfig);
+  db.connect((err) => {
+    if (err) res.status(500).json(err);
+    const sql = `
+    SELECT COUNT(*) FROM Animal
+    WHERE User_ID = '${req.body.ID}
+    AND User_ID = 
+    >(SELECT AVG(Damage) FROM Animal)
+    `;
+    db.query(sql, (err, result) => {
+      if (err) {
+        res.status(500).json(err);
+      };
+      res.status(201).json(result);
+    })
+  });
+});
+
+
+app.get('/user/division', (req, res) => {
+  db = mysql.createConnection(mysqlConfig);
+  db.connect((err) => {
+    if (err) res.status(500).json(err);
+    const sql = `
+    SELECT * FROM User
+    INNER JOIN User_Storage AS U ON User.ID = User_storage.User_ID
+    INNER JOIN Ender_Chest U.ID = Ender_Chest.UserID
+    `;
+    db.query(sql, (err, result) => {
+      if (err) {
+        res.status(500).json(err);
+      };
+      res.status(201).json(result);
+    })
+  });
+});
+
+
 app.get('/users', (req, res) => {
   db = mysql.createConnection(mysqlConfig);
   db.connect((err) => {
