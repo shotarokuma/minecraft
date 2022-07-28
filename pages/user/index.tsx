@@ -25,7 +25,7 @@ import CoordinateForm from '../../components/CoordinateForm';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../style/constants';
 
-type User = {
+export type User = {
   ID: number;
   Name: string;
   CoordinateX: number;

@@ -24,7 +24,7 @@ app.get('/user/select', (req, res) => {
     if (err) res.status(500).json(err);
     const sql = `
     SELECT * FROM User
-    WHERE Name = '${req.body.Name}'
+    WHERE Name = '${req.query.Name}'
     `;
     db.query(sql, (err, result) => {
       if (err) {
@@ -40,8 +40,8 @@ app.get('/user/join', (req, res) => {
   db.connect((err) => {
     if (err) res.status(500).json(err);
     const sql = `
-    SELECT CoordinateX, CoordinateY, CoordinateZ, Reputation FROM User, Host_In
-    WHERE User.ID = '${req.body.ID}
+    SELECT Host_In.CoordinateX, Host_In.CoordinateY, Host_In.CoordinateZ, Host_In.Reputation FROM User, Host_In
+    WHERE User.ID = ${req.query.ID}
     AND User.ID = Host_In.User_ID
     `;
     db.query(sql, (err, result) => {
@@ -59,7 +59,7 @@ app.get('/user/aggregation', (req, res) => {
     if (err) res.status(500).json(err);
     const sql = `
     SELECT COUNT(*) FROM Animal
-    WHERE User_ID = '${req.body.ID}
+    WHERE UserID = ${req.query.ID}
     `;
     db.query(sql, (err, result) => {
       if (err) {
@@ -77,9 +77,8 @@ app.get('/user/nestedAggregation', (req, res) => {
     if (err) res.status(500).json(err);
     const sql = `
     SELECT COUNT(*) FROM Animal
-    WHERE User_ID = '${req.body.ID}
-    AND User_ID = 
-    >(SELECT AVG(Damage) FROM Animal)
+    WHERE UserID = ${req.query.ID}
+    AND Damage >(SELECT AVG(Damage) FROM Animal)
     `;
     db.query(sql, (err, result) => {
       if (err) {
