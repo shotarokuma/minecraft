@@ -147,16 +147,14 @@ const Home: NextPage = () => {
             </Button>
           )}
         </form>
-        {activeStep !== 4 && (
           <Button
             style={{ marginTop: "30px" }}
             variant="contained"
             onClick={handleNext}
             color="primary"
             fullWidth
-          >Next
+            >{activeStep !== 4 ? "Next" : "Init"}
           </Button>
-        )}
       </Container>
       <Container component="main" maxWidth="md">
         {(activeStep === 0 && user !== null) && (
