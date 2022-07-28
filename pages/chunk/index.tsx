@@ -1,6 +1,6 @@
 import React from 'react';
 import { NextPage } from 'next';
-import { useForm, SubmitHandler, UseFormRegiste } from 'react-hook-form';
+import { useForm, SubmitHandler, UseFormRegister } from 'react-hook-form';
 import axios from "axios";
 
 import AdjustIcon from '@mui/icons-material/Adjust';
@@ -33,7 +33,7 @@ type Chunk = {
 };
 
 type Form = {
-  register: UseFormRegister<User>
+  register: UseFormRegister<Chunk>
 };
 
 
