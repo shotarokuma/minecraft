@@ -36,7 +36,7 @@ app.get('/user/select', (req, res) => {
   });
 });
 
-app.get('/user/join', (req, res) => {
+app.get('/user/projection', (req, res) => {
   db = mysql.createConnection(mysqlConfig);
   db.connect((err) => {
     if (err) res.status(500).json(err);
@@ -105,6 +105,26 @@ app.get('/user/division', (req, res) => {
     `;
     db.query(sql, (err, result) => {
       if (err) {
+        res.status(500).json(err);
+      };
+      res.status(201).json(result);
+    })
+  });
+});
+
+app.get('/user/join', (req, res) => {
+  db = mysql.createConnection(mysqlConfig);
+  db.connect((err) => {
+    if (err) res.status(500).json(err);
+    const sql = `
+    SELECT Animal.Health AS AHealth, User.Health AS UHealth
+    FROM User
+    INNER JOIN Animal ON Animal.UserID = User.ID
+    WHERE User.ID = ${req.query.ID}
+    `;
+    db.query(sql, (err, result) => {
+      if (err) {
+        console.log(err);
         res.status(500).json(err);
       };
       res.status(201).json(result);

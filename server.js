@@ -10,7 +10,7 @@ const handle = app.getRequestHandler();
 
 const apiPaths = {
     '/api': {
-        target: process.env.SERVER_PORT, 
+        target: process.env.SERVER_PORT || 'http://localhost:3001', 
         pathRewrite: {
             '^/api': '/'
         },

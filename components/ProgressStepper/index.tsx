@@ -10,7 +10,7 @@ type Props = {
 }
 
 const getSteps = ():string[] =>{
-  return ['find your user', 'find your village and your reputation in there', 'find the number of your animals','find the number of your strong animals', 'find users with ender chest & storage'];
+  return ['find your user', 'find your village and your reputation in there', 'find the number of your animals','find the number of your strong animals', 'find users with ender chest & storage',"find user's & animals' health "];
 };
 
 const ProgressStepper: React.FC<Props> = ({activeStep}) => {

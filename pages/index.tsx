@@ -44,7 +44,12 @@ type Host_In = {
   CoordinateX: number;
   CoordinateY: number;
   CoordinateZ: number;
-}
+};
+
+type Health = {
+  AHealth: string;
+  UHealth: string;
+};
 
 const Forms: React.FC<FormsProps> = ({
   activeStep,
@@ -56,6 +61,8 @@ const Forms: React.FC<FormsProps> = ({
     case 1:
     case 2:
     case 3:
+      return <FormTextField register={register} type="ID" isNum={true} />
+    case 5:
       return <FormTextField register={register} type="ID" isNum={true} />
     default:
       return <></>
@@ -71,11 +78,12 @@ const Home: NextPage = () => {
   const [animalNum, setAnimalNum] = React.useState<number | null>(null);
   const [strongNum, setStrongNum] = React.useState<number | null>(null);
   const [users, setUsers] = React.useState<User[] | null>(null);
+  const [health, setHealth] = React.useState<Health[] | null>(null);
 
 
 
   const handleNext = () => {
-    const newStep = activeStep != 4 ? activeStep + 1 : 0
+    const newStep = activeStep != 5 ? activeStep + 1 : 0
     setActiveStep(newStep);
   }
 
@@ -91,11 +99,13 @@ const Home: NextPage = () => {
   const getEndPoint = (): string => {
     switch (activeStep) {
       case 1:
-        return '/api/user/join';
+        return '/api/user/projection';
       case 2:
         return '/api/user/aggregation';
       case 3:
         return '/api/user/nestedAggregation';
+      case 5:
+        return '/api/user/join';
       default:
         return '';
     }
@@ -114,6 +124,9 @@ const Home: NextPage = () => {
           case 3:
             setStrongNum(res.data[0]['COUNT(*)']);
             break;
+          case 5:
+            setHealth(res.data);
+            break;
         }
       })
       .catch(err => alert("invalid input"));
@@ -125,7 +138,7 @@ const Home: NextPage = () => {
     axios.get('/api/user/division')
       .then((res) => setUsers(res.data))
       .catch(err => alert("invalid input"));
-  }, [activeStep])
+  }, [activeStep]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -146,50 +159,50 @@ const Home: NextPage = () => {
             </Button>
           )}
         </form>
-          <Button
-            style={{ marginTop: "30px" }}
-            variant="contained"
-            onClick={handleNext}
-            color="primary"
-            fullWidth
-            >{activeStep !== 4 ? "Next" : "Init"}
-          </Button>
+        <Button
+          style={{ marginTop: "30px" }}
+          variant="contained"
+          onClick={handleNext}
+          color="primary"
+          fullWidth
+        >{activeStep !== 5 ? "Next" : "Init"}
+        </Button>
       </Container>
       <Container component="main" maxWidth="md">
         {(activeStep === 0 && users !== null) && (
-           <Paper sx={{ width: '100%' }} elevation={3} style={{ marginTop: "100px" }}>
-           <TableContainer sx={{ maxHeight: 440 }}>
-             <Table aria-label="simple table">
-               <TableHead>
-                 <TableRow>
-                   <TableCell align="left" width="20px">
-                     ID</TableCell>
-                   <TableCell>Name</TableCell>
-                   <TableCell>Coordinate</TableCell>
-                   <TableCell>Food Bar</TableCell>
-                   <TableCell>Health</TableCell>
-                   <TableCell>Spawn Point</TableCell>
-                 </TableRow>
-               </TableHead>
-               <TableBody>
-                 {
-                   users.map((user,index) => (
-                     <TableRow key ={index} hover>
-                     <TableCell align="left" width="20px">
-                       {user.ID}
-                     </TableCell>
-                     <TableCell>{user.Name}</TableCell>
-                     <TableCell >{[user.CoordinateX, user.CoordinateY, user.CoordinateZ].toString()}</TableCell>
-                     <TableCell >{user.Food_Bar}</TableCell>
-                     <TableCell >{user.Health}</TableCell>
-                     <TableCell >{[user.Spawn_PointX, user.Spawn_PointY, user.Spawn_PointZ].toString()}</TableCell>
-                   </TableRow>
-                   ))
-                 }
-               </TableBody>
-             </Table>
-           </TableContainer>
-         </Paper>
+          <Paper sx={{ width: '100%' }} elevation={3} style={{ marginTop: "100px" }}>
+            <TableContainer sx={{ maxHeight: 440 }}>
+              <Table aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="left" width="20px">
+                      ID</TableCell>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Coordinate</TableCell>
+                    <TableCell>Food Bar</TableCell>
+                    <TableCell>Health</TableCell>
+                    <TableCell>Spawn Point</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {
+                    users.map((user, index) => (
+                      <TableRow key={index} hover>
+                        <TableCell align="left" width="20px">
+                          {user.ID}
+                        </TableCell>
+                        <TableCell>{user.Name}</TableCell>
+                        <TableCell >{[user.CoordinateX, user.CoordinateY, user.CoordinateZ].toString()}</TableCell>
+                        <TableCell >{user.Food_Bar}</TableCell>
+                        <TableCell >{user.Health}</TableCell>
+                        <TableCell >{[user.Spawn_PointX, user.Spawn_PointY, user.Spawn_PointZ].toString()}</TableCell>
+                      </TableRow>
+                    ))
+                  }
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
         )}
         {(activeStep === 1 && host !== null) && (
           <Paper sx={{ width: '100%' }} elevation={3} style={{ marginTop: "100px" }}>
@@ -258,7 +271,7 @@ const Home: NextPage = () => {
             </CardMedia>
           </Card>
         )}
-         {(activeStep === 4 && users !== null) && (
+        {(activeStep === 4 && users !== null) && (
           <Paper sx={{ width: '100%' }} elevation={3} style={{ marginTop: "100px" }}>
             <TableContainer sx={{ maxHeight: 440 }}>
               <Table aria-label="simple table">
@@ -275,17 +288,17 @@ const Home: NextPage = () => {
                 </TableHead>
                 <TableBody>
                   {
-                    users.map((user,index) => (
-                      <TableRow key ={index} hover>
-                      <TableCell align="left" width="20px">
-                        {user.ID}
-                      </TableCell>
-                      <TableCell>{user.Name}</TableCell>
-                      <TableCell >{[user.CoordinateX, user.CoordinateY, user.CoordinateZ].toString()}</TableCell>
-                      <TableCell >{user.Food_Bar}</TableCell>
-                      <TableCell >{user.Health}</TableCell>
-                      <TableCell >{[user.Spawn_PointX, user.Spawn_PointY, user.Spawn_PointZ].toString()}</TableCell>
-                    </TableRow>
+                    users.map((user, index) => (
+                      <TableRow key={index} hover>
+                        <TableCell align="left" width="20px">
+                          {user.ID}
+                        </TableCell>
+                        <TableCell>{user.Name}</TableCell>
+                        <TableCell >{[user.CoordinateX, user.CoordinateY, user.CoordinateZ].toString()}</TableCell>
+                        <TableCell >{user.Food_Bar}</TableCell>
+                        <TableCell >{user.Health}</TableCell>
+                        <TableCell >{[user.Spawn_PointX, user.Spawn_PointY, user.Spawn_PointZ].toString()}</TableCell>
+                      </TableRow>
                     ))
                   }
                 </TableBody>
@@ -293,6 +306,44 @@ const Home: NextPage = () => {
             </TableContainer>
           </Paper>
         )}
+        {
+          (activeStep === 5 && health !== null) && (
+            <Paper sx={{ width: '100%' }} elevation={3} style={{ marginTop: "100px" }}>
+               <TableContainer sx={{ maxHeight: 440 }}>
+                <Table aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="center">{"User's Health"}</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {health[0] && (
+                       <TableRow hover>
+                       <TableCell align="center">{health[0].UHealth}</TableCell>
+                       </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <TableContainer sx={{ maxHeight: 440 }}>
+                <Table aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="center">{"Animal's Health"}</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {health.map((h, index) => (
+                       <TableRow key={index} hover>
+                     <TableCell align="center">{h.AHealth}</TableCell>
+                     </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Paper>
+          )
+        }
       </Container>
     </ThemeProvider >
   )
