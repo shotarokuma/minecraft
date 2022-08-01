@@ -90,12 +90,9 @@ app.get('/user/nestedAggregation', (req, res) => {
   });
 });
 
-
-app.get('/user/division', (req, res) => {
-  db = mysql.createConnection(mysqlConfig);
-  db.connect((err) => {
-    if (err) res.status(500).json(err);
-    const sql = `
+const getDivSQL = (ender_chest,user_storage) => {
+  if(ender_chest === 'true' && user_storage === 'true'){
+    return `
     SELECT * FROM User
     WHERE ID NOT IN (
       SELECT ID FROM User
@@ -103,6 +100,33 @@ app.get('/user/division', (req, res) => {
       OR ID NOT IN ( SELECT User_ID FROM User_storage)
     )
     `;
+  }else if(ender_chest === 'true'){
+    return `
+    SELECT * FROM User
+    WHERE ID NOT IN (
+      SELECT ID FROM User
+      WHERE ID NOT IN (SELECT UserID  FROM Ender_Chest )
+    )
+    `;
+  }else if(user_storage === 'true'){
+    return `
+    SELECT * FROM User
+    WHERE ID NOT IN (
+      SELECT ID FROM User
+      WHERE ID NOT IN ( SELECT User_ID FROM User_storage)
+    )
+    `;
+  }else{
+    return `
+    SELECT * FROM User
+    `;
+  }
+}
+app.get('/user/division', (req, res) => {
+  db = mysql.createConnection(mysqlConfig);
+  db.connect((err) => {
+    if (err) res.status(500).json(err);
+    const sql = getDivSQL(req.query.Ender_Chest, req.query.User_Storage);
     db.query(sql, (err, result) => {
       if (err) {
         res.status(500).json(err);

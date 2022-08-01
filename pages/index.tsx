@@ -19,6 +19,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import Header from '../components/Header';
+import CheckBox from '../components/CheckBox';
 import FormTextField from '../components/FormTextField';
 import ProgressStepper from '../components/ProgressStepper';
 import { ThemeProvider } from '@mui/material/styles';
@@ -34,9 +35,15 @@ type Input1 = {
   ID: number;
 };
 
+
+type Input2 = {
+  Ender_Chest: boolean;
+  User_Storage: boolean;
+};
+
 type FormsProps = {
   activeStep: number;
-  register: UseFormRegister<Input0> | UseFormRegister<Input1>;
+  register: UseFormRegister<Input0> | UseFormRegister<Input1> |UseFormRegister<Input2>;
 };
 
 type Host_In = {
@@ -62,6 +69,8 @@ const Forms: React.FC<FormsProps> = ({
     case 2:
     case 3:
       return <FormTextField register={register} type="ID" isNum={true} />
+    case 4:
+      return <CheckBox register={register}/>
     case 5:
       return <FormTextField register={register} type="ID" isNum={true} />
     default:
@@ -74,13 +83,33 @@ const Home: NextPage = () => {
   const [activeStep, setActiveStep] = React.useState<number>(0);
   const { register, handleSubmit, reset } = useForm<Input0>();
   const { register: register1, handleSubmit: handleSubmit1, reset: reset1 } = useForm<Input1>();
+  const { register: register2, handleSubmit: handleSubmit2} = useForm<Input2>();
+
   const [host, setHost] = React.useState<Host_In[] | null>(null);
   const [animalNum, setAnimalNum] = React.useState<number | null>(null);
   const [strongNum, setStrongNum] = React.useState<number | null>(null);
   const [users, setUsers] = React.useState<User[] | null>(null);
   const [health, setHealth] = React.useState<Health[] | null>(null);
 
+  const getSubmit = () => {
+    if(activeStep === 0){
+      return  handleSubmit(onSubmit0);
+    }else if(activeStep === 4){
+      return handleSubmit2(onSubmit2)
+    }else{
+      return handleSubmit1(onSubmit1)
+    }
+  };
 
+  const getRegister = () => {
+    if(activeStep === 0){
+      return register;
+    }else if(activeStep === 4){
+      return register2;
+    }else{
+      return register1;
+    }
+  }
 
   const handleNext = () => {
     const newStep = activeStep != 5 ? activeStep + 1 : 0
@@ -133,12 +162,11 @@ const Home: NextPage = () => {
     reset1();
   };
 
-  React.useEffect(() => {
-    if (activeStep !== 4) return;
-    axios.get('/api/user/division')
+  const onSubmit2: SubmitHandler<Input2>  = async(data) => {
+    axios.get('/api/user/division', { params: { ...data } })
       .then((res) => setUsers(res.data))
       .catch(err => alert("invalid input"));
-  }, [activeStep]);
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -146,18 +174,16 @@ const Home: NextPage = () => {
       <ProgressStepper activeStep={activeStep} />
       <Container maxWidth="sm">
         <Typography variant="h5" style={{ marginTop: "30px", textAlign: "center" }} >{"Search your info"}</Typography>
-        <form onSubmit={activeStep === 0 ? handleSubmit(onSubmit0) : handleSubmit1(onSubmit1)}>
-          <Forms activeStep={activeStep} register={activeStep === 0 ? register : register1} />
-          {activeStep !== 4 && (
-            <Button
-              style={{ marginTop: "30px" }}
-              variant="contained"
-              type="submit"
-              color="primary"
-              fullWidth
-            >Submit
-            </Button>
-          )}
+        <form onSubmit={getSubmit()}>
+          <Forms activeStep={activeStep} register={getRegister()} />
+          <Button
+            style={{ marginTop: "30px" }}
+            variant="contained"
+            type="submit"
+            color="primary"
+            fullWidth
+          >Submit
+          </Button>
         </form>
         <Button
           style={{ marginTop: "30px" }}
@@ -309,7 +335,7 @@ const Home: NextPage = () => {
         {
           (activeStep === 5 && health !== null) && (
             <Paper sx={{ width: '100%' }} elevation={3} style={{ marginTop: "100px" }}>
-               <TableContainer sx={{ maxHeight: 440 }}>
+              <TableContainer sx={{ maxHeight: 440 }}>
                 <Table aria-label="simple table">
                   <TableHead>
                     <TableRow>
@@ -318,9 +344,9 @@ const Home: NextPage = () => {
                   </TableHead>
                   <TableBody>
                     {health[0] && (
-                       <TableRow hover>
-                       <TableCell align="center">{health[0].UHealth}</TableCell>
-                       </TableRow>
+                      <TableRow hover>
+                        <TableCell align="center">{health[0].UHealth}</TableCell>
+                      </TableRow>
                     )}
                   </TableBody>
                 </Table>
@@ -334,9 +360,9 @@ const Home: NextPage = () => {
                   </TableHead>
                   <TableBody>
                     {health.map((h, index) => (
-                       <TableRow key={index} hover>
-                     <TableCell align="center">{h.AHealth}</TableCell>
-                     </TableRow>
+                      <TableRow key={index} hover>
+                        <TableCell align="center">{h.AHealth}</TableCell>
+                      </TableRow>
                     ))}
                   </TableBody>
                 </Table>
