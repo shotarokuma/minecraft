@@ -67,7 +67,6 @@ const Home: NextPage = () => {
   const [activeStep, setActiveStep] = React.useState<number>(0);
   const { register, handleSubmit, reset } = useForm<Input0>();
   const { register: register1, handleSubmit: handleSubmit1, reset: reset1 } = useForm<Input1>();
-  const [user, setUser] = React.useState<User | null>(null);
   const [host, setHost] = React.useState<Host_In[] | null>(null);
   const [animalNum, setAnimalNum] = React.useState<number | null>(null);
   const [strongNum, setStrongNum] = React.useState<number | null>(null);
@@ -83,7 +82,7 @@ const Home: NextPage = () => {
   const onSubmit0: SubmitHandler<Input0> = async (data) => {
     axios.get('/api/user/select', { params: { ...data } })
       .then((res) => {
-        res.data.length !== 0 ? setUser(res.data[0]) : setUser(null);
+        res.data.length !== 0 ? setUsers(res.data) : setUsers(null);
       })
       .catch(err => alert("invalid input"));
     reset();
@@ -157,36 +156,40 @@ const Home: NextPage = () => {
           </Button>
       </Container>
       <Container component="main" maxWidth="md">
-        {(activeStep === 0 && user !== null) && (
-          <Paper sx={{ width: '100%' }} elevation={3} style={{ marginTop: "100px" }}>
-            <TableContainer sx={{ maxHeight: 440 }}>
-              <Table aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="left" width="20px">
-                      ID</TableCell>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Coordinate</TableCell>
-                    <TableCell>Food Bar</TableCell>
-                    <TableCell>Health</TableCell>
-                    <TableCell>Spawn Point</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow hover>
-                    <TableCell align="left" width="20px">
-                      {user.ID}
-                    </TableCell>
-                    <TableCell>{user.Name}</TableCell>
-                    <TableCell >{[user.CoordinateX, user.CoordinateY, user.CoordinateZ].toString()}</TableCell>
-                    <TableCell >{user.Food_Bar}</TableCell>
-                    <TableCell >{user.Health}</TableCell>
-                    <TableCell >{[user.Spawn_PointX, user.Spawn_PointY, user.Spawn_PointZ].toString()}</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Paper>
+        {(activeStep === 0 && users !== null) && (
+           <Paper sx={{ width: '100%' }} elevation={3} style={{ marginTop: "100px" }}>
+           <TableContainer sx={{ maxHeight: 440 }}>
+             <Table aria-label="simple table">
+               <TableHead>
+                 <TableRow>
+                   <TableCell align="left" width="20px">
+                     ID</TableCell>
+                   <TableCell>Name</TableCell>
+                   <TableCell>Coordinate</TableCell>
+                   <TableCell>Food Bar</TableCell>
+                   <TableCell>Health</TableCell>
+                   <TableCell>Spawn Point</TableCell>
+                 </TableRow>
+               </TableHead>
+               <TableBody>
+                 {
+                   users.map((user,index) => (
+                     <TableRow key ={index} hover>
+                     <TableCell align="left" width="20px">
+                       {user.ID}
+                     </TableCell>
+                     <TableCell>{user.Name}</TableCell>
+                     <TableCell >{[user.CoordinateX, user.CoordinateY, user.CoordinateZ].toString()}</TableCell>
+                     <TableCell >{user.Food_Bar}</TableCell>
+                     <TableCell >{user.Health}</TableCell>
+                     <TableCell >{[user.Spawn_PointX, user.Spawn_PointY, user.Spawn_PointZ].toString()}</TableCell>
+                   </TableRow>
+                   ))
+                 }
+               </TableBody>
+             </Table>
+           </TableContainer>
+         </Paper>
         )}
         {(activeStep === 1 && host !== null) && (
           <Paper sx={{ width: '100%' }} elevation={3} style={{ marginTop: "100px" }}>
